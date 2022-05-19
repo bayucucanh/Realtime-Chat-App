@@ -1,16 +1,15 @@
-import LottieView from 'lottie-react-native';
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
   ScrollView,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
-  Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {LoginAnim} from '../../assets';
 import {CustomButton, CustomInput} from '../../components';
+import {addUser, register} from '../../firebase';
 import {COLORS, FONTS, SIZES} from '../../themes';
 import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
 
@@ -18,17 +17,24 @@ export default function Register({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {control, handleSubmit} = useForm();
 
+  const onSignUp = data => {
+    register(data.email, data.password)
+      .then(res => {
+        // console.log('res', res);
+        addUser(data.email, data.username, res.user.uid).then(() =>
+          console.log('Data set.'),
+        );
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scroll} testID="LoginScreen">
       <View style={styles.container}>
-        <LottieView
-          style={styles.logoImage}
-          source={LoginAnim}
-          autoPlay
-          loop={false}
-        />
         <View>
-          {/* <Text style={styles.title}>Register</Text> */}
+          <Text style={styles.title}>Register</Text>
 
           <View style={styles.form}>
             <CustomInput
@@ -87,7 +93,12 @@ export default function Register({navigation}) {
                 </TouchableOpacity>
               }
             />
-            <CustomButton testID="btn-login" primary title="Login" />
+            <CustomButton
+              testID="btn-login"
+              primary
+              title="REGISTER"
+              onPress={handleSubmit(onSignUp)}
+            />
 
             <View style={styles.createSection}>
               <Text style={styles.infoText}>Already have an account?</Text>
@@ -95,7 +106,7 @@ export default function Register({navigation}) {
                 onPress={() => {
                   navigation.navigate('LoginScreen');
                 }}>
-                <Text style={styles.linkBtn}>Register</Text>
+                <Text style={styles.linkBtn}>LOGIN</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -124,7 +135,7 @@ const styles = StyleSheet.create({
     // marginTop: 50,
   },
   title: {
-    ...FONTS.h2,
+    ...FONTS.h1,
     textAlign: 'center',
     paddingTop: 4,
     color: COLORS.black,
@@ -141,13 +152,13 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   createSection: {
-    marginVertical: 10,
+    marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
     // flexDirection: 'row',
   },
   linkBtn: {
-    marginTop: 7,
+    marginTop: 15,
     color: COLORS.primary,
     ...FONTS.h3,
   },

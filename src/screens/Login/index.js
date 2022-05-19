@@ -13,10 +13,21 @@ import {LoginAnim} from '../../assets';
 import {CustomButton, CustomInput} from '../../components';
 import {COLORS, FONTS, SIZES} from '../../themes';
 import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
+import {login} from '../../firebase';
 
 export default function Login({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {control, handleSubmit} = useForm();
+
+  const onSignIn = data => {
+    login(data.email, data.password)
+      .then(res => {
+        console.log('res', res);
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scroll} testID="LoginScreen">
@@ -69,7 +80,12 @@ export default function Login({navigation}) {
                 </TouchableOpacity>
               }
             />
-            <CustomButton testID="btn-login" primary title="Login" />
+            <CustomButton
+              testID="btn-login"
+              primary
+              title="LOGIN"
+              onPress={handleSubmit(onSignIn)}
+            />
 
             <View style={styles.createSection}>
               <Text style={styles.infoText}>Dont have an account?</Text>
@@ -123,7 +139,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   createSection: {
-    marginVertical: 2,
+    marginVertical: 20,
     justifyContent: 'center',
     alignItems: 'center',
     // flexDirection: 'row',

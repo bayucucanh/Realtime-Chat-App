@@ -9,9 +9,8 @@ export const register = (email, pass) =>
 
 export const forgetPassword = email => auth().sendPasswordResetEmail(email);
 
-export const addUser = (email, username, uid) => {
+export const addUser = (email, username, uid) =>
   database().ref(`/users/${uid}`).set({
     email: email,
     username: username,
   });
-};
