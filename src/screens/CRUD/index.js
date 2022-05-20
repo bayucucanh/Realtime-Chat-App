@@ -32,10 +32,15 @@ export default function CrudScreen() {
   };
 
   const savePokemon = () => {
+    if (name === '') {
+      Alert.alert('Error', 'Harap isi field');
+      return false;
+    }
     const refrence = database().ref('/pokemonBag');
     try {
-      refrence.push({name: 'woke'});
+      refrence.push({name: name});
       Alert.alert('Successfully Saved');
+      setName('');
     } catch (error) {
       Alert.alert('Ops', error);
     }
@@ -80,30 +85,39 @@ export default function CrudScreen() {
           <View style={styles.header}>
             <Text style={styles.headerText}>Pokemon Bag</Text>
           </View>
-          <View style={styles.form}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Pokemon Name"
-              onChangeText={text => setName(text)}
-            />
-            <Button title="Save" onPress={() => savePokemon()} />
-          </View>
           <FlatList
             data={key}
-            numColumns={2}
-            columnWrapperStyle={{
-              margin: 5,
-            }}
+            ListHeaderComponent={() => (
+              <View style={styles.form}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter Pokemon Name"
+                  onChangeText={value => {
+                    setName(value);
+                  }}
+                  value={name}
+                />
+                <Button title="Save" onPress={() => savePokemon()} />
+              </View>
+            )}
             renderItem={({item, index}) => (
-              <>
-                <TouchableOpacity
-                  onPress={() => updatePokemon(item)}
-                  style={styles.pokeBagItem}>
+              <View style={styles.listPokemons}>
+                <TouchableOpacity style={styles.pokeBagItem}>
                   <Text style={styles.pokeBagItemText}>
                     🔴 {pokemonData[item]?.name}
                   </Text>
                 </TouchableOpacity>
-              </>
+                <TouchableOpacity
+                  onPress={() => updatePokemon(item)}
+                  style={styles.delete}>
+                  <Text style={styles.pokeBagItemText}>📝</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => removePokemon(item)}
+                  style={styles.edit}>
+                  <Text style={styles.pokeBagItemText}>❌</Text>
+                </TouchableOpacity>
+              </View>
             )}
             keyExtractor={(item, index) => index.toString()}
           />
@@ -133,6 +147,12 @@ const styles = StyleSheet.create({
   bodyContent: {
     flex: 5,
   },
+  listPokemons: {
+    flexDirection: 'row',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
   pokeBag: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -142,6 +162,24 @@ const styles = StyleSheet.create({
   },
   pokeBagItem: {
     width: '50%',
+    height: 50,
+    backgroundColor: '#00BFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 5,
+    borderRadius: 5,
+  },
+  delete: {
+    width: '10%',
+    height: 50,
+    backgroundColor: '#00BFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 5,
+    borderRadius: 5,
+  },
+  edit: {
+    width: '10%',
     height: 50,
     backgroundColor: '#00BFFF',
     alignItems: 'center',
