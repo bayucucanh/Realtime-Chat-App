@@ -1,12 +1,12 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Login, Register, Splash} from '../screens';
+import {Login, Register, Splash, CrudScreen} from '../screens';
 
 const Stack = createNativeStackNavigator();
 
 function Router() {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="CrudScreen">
       <Stack.Screen
         name="SplashScreen"
         component={Splash}
@@ -20,6 +20,11 @@ function Router() {
       <Stack.Screen
         name="RegisterScreen"
         component={Register}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CrudScreen"
+        component={CrudScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
