@@ -11,6 +11,7 @@ export const forgetPassword = email => auth().sendPasswordResetEmail(email);
 
 export const addUser = (email, username, uid) =>
   database().ref(`/users/${uid}`).set({
+    id_user: uid,
     email: email,
     username: username,
   });

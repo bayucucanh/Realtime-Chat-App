@@ -13,7 +13,7 @@ import {LoginAnim} from '../../assets';
 import {CustomButton, CustomInput} from '../../components';
 import {COLORS, FONTS, SIZES} from '../../themes';
 import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
-import {login} from '../../firebase';
+import {login} from '../../services';
 
 export default function Login({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
@@ -23,6 +23,7 @@ export default function Login({navigation}) {
     login(data.email, data.password)
       .then(res => {
         console.log('res', res);
+        navigation.navigate('DashboardUserScreen');
       })
       .catch(err => {
         console.log('err', err);

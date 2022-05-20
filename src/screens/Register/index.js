@@ -6,28 +6,56 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {CustomButton, CustomInput} from '../../components';
-import {addUser, register} from '../../firebase';
+import {addUser, register} from '../../services';
 import {COLORS, FONTS, SIZES} from '../../themes';
 import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
+import database from '@react-native-firebase/database';
+import uuid from 'react-native-uuid';
 
 export default function Register({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {control, handleSubmit} = useForm();
+  const [loading, setLoading] = useState(false);
 
   const onSignUp = data => {
+    setLoading(true);
     register(data.email, data.password)
       .then(res => {
         // console.log('res', res);
-        addUser(data.email, data.username, res.user.uid).then(() =>
-          console.log('Data set.'),
+        addUser(data.email, data.username, res.user.uid).then(
+          () => console.log('Data set.'),
+          navigation.navigate('LoginScreen'),
         );
+        setLoading(false);
       })
       .catch(err => {
         console.log('err', err);
+        setLoading(false);
       });
+  };
+
+  const onRegisterWithRDB = async data => {
+    let Formdata = {
+      id: uuid.v4(),
+      name: data.username,
+      emailId: data.email,
+      password: data.password,
+    };
+    try {
+      database()
+        .ref('/users/' + Formdata.id)
+        .set(Formdata)
+        .then(() => {
+          Alert.alert('Success', 'Register Successfully!');
+          navigation.navigate('LoginScreen');
+        });
+    } catch (error) {
+      Alert.alert('Error', error);
+    }
   };
 
   return (
@@ -96,8 +124,10 @@ export default function Register({navigation}) {
             <CustomButton
               testID="btn-login"
               primary
+              loading={loading}
+              disabled={loading}
               title="REGISTER"
-              onPress={handleSubmit(onSignUp)}
+              onPress={handleSubmit(onRegisterWithRDB)}
             />
 
             <View style={styles.createSection}>
