@@ -1,12 +1,19 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {Login, Register, Splash, CrudScreen, DashboardUser} from '../screens';
+import {
+  Login,
+  Register,
+  Splash,
+  CrudScreen,
+  DashboardUser,
+  Chat,
+} from '../screens';
 
 const Stack = createNativeStackNavigator();
 
 function Router() {
   return (
-    <Stack.Navigator initialRouteName="Splash">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="SplashScreen"
         component={Splash}
@@ -30,6 +37,11 @@ function Router() {
       <Stack.Screen
         name="DashboardUserScreen"
         component={DashboardUser}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={Chat}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

@@ -18,7 +18,12 @@
     "@react-native-firebase/database": "^14.9.3",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
+<<<<<<< HEAD
     "glob": "^7.2.0",
+=======
+    "@rneui/base": "^4.0.0-rc.4",
+    "@rneui/themed": "^4.0.0-rc.4",
+>>>>>>> 6552f899767d4b02a6fb0267b2b86abf14830015
     "lottie-react-native": "^5.1.2",
     "moment": "^2.29.3",
     "react": "17.0.2",

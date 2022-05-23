@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Alert,
   Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
@@ -14,12 +15,13 @@ import {CustomButton, CustomInput} from '../../components';
 import {COLORS, FONTS, SIZES} from '../../themes';
 import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
 import {login} from '../../services';
+import database from '@react-native-firebase/database';
 
 export default function Login({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {control, handleSubmit} = useForm();
 
-  const onSignIn = data => {
+  const onLogin = data => {
     login(data.email, data.password)
       .then(res => {
         console.log('res', res);
@@ -28,6 +30,31 @@ export default function Login({navigation}) {
       .catch(err => {
         console.log('err', err);
       });
+  };
+
+  const onLoginRNDB = data => {
+    try {
+      database()
+        .ref('users/')
+        .orderByChild('emailId')
+        .equalTo(data.email)
+        .once('value')
+        .then(async snapshot => {
+          if (snapshot.val() == null) {
+            Alert.alert('Invalid Email Id');
+            return false;
+          }
+          let userData = Object.values(snapshot.val())[0];
+          if (userData?.password != data.password) {
+            Alert.alert('Error', 'Invalid Password!');
+            return false;
+          }
+          console.log('User data: ', userData);
+          navigation.navigate('DashboardUserScreen');
+        });
+    } catch (error) {
+      Alert.alert('Error', 'Not Found User');
+    }
   };
 
   return (
@@ -85,7 +112,7 @@ export default function Login({navigation}) {
               testID="btn-login"
               primary
               title="LOGIN"
-              onPress={handleSubmit(onSignIn)}
+              onPress={handleSubmit(onLogin)}
             />
 
             <View style={styles.createSection}>
