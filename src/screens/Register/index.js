@@ -127,7 +127,7 @@ export default function Register({navigation}) {
               loading={loading}
               disabled={loading}
               title="REGISTER"
-              onPress={handleSubmit(onRegisterWithRDB)}
+              onPress={handleSubmit(onSignUp)}
             />
 
             <View style={styles.createSection}>
