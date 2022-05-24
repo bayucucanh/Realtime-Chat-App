@@ -20,6 +20,9 @@ export const addUser = (email, name, uid, bio) =>
       avatar: `https://ui-avatars.com/api/?background=random&name=${name}`,
     });
 
+export const getProfile = email =>
+  database().ref('users/').orderByChild('email').equalTo(email).once('value');
+
 export const onRegisterWithRDB = async data =>
   database()
     .ref('/users/' + data.id)
@@ -28,3 +31,6 @@ export const onRegisterWithRDB = async data =>
       email: data.email,
       name: data.name,
     });
+
+export const loginWithRDB = email =>
+  database().ref('users/').orderByChild('emailId').equalTo(email).once('value');
