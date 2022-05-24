@@ -9,9 +9,22 @@ export const register = (email, pass) =>
 
 export const forgetPassword = email => auth().sendPasswordResetEmail(email);
 
-export const addUser = (email, username, uid) =>
-  database().ref(`/users/${uid}`).set({
-    id_user: uid,
-    email: email,
-    username: username,
-  });
+export const addUser = (email, name, uid, bio) =>
+  database()
+    .ref(`/users/${uid}`)
+    .set({
+      id_user: uid,
+      email: email,
+      name: name,
+      bio: bio || 'my bio',
+      avatar: `https://ui-avatars.com/api/?background=random&name=${name}`,
+    });
+
+export const onRegisterWithRDB = async data =>
+  database()
+    .ref('/users/' + data.id)
+    .set({
+      id_user: data.uid,
+      email: data.email,
+      name: data.name,
+    });
