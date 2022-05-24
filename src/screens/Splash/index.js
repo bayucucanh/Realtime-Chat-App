@@ -16,7 +16,7 @@ export default function Splash({navigation}) {
           navigation.replace('LoginScreen');
         }}
       />
-      <Text style={styles.copyright}>Dzun Nurroin</Text>
+      <Text style={styles.copyright}>Made by ❤️</Text>
     </View>
   );
 }
