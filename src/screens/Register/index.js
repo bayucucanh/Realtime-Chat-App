@@ -6,15 +6,12 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {CustomButton, CustomInput} from '../../components';
 import {addUser, register} from '../../services';
 import {COLORS, FONTS, SIZES} from '../../themes';
-import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
-import database from '@react-native-firebase/database';
-import uuid from 'react-native-uuid';
+import {EMAIL_REGEX, PASSWORD_REGEX, showError, showSuccess} from '../../utils';
 
 export default function Register({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
@@ -26,36 +23,18 @@ export default function Register({navigation}) {
     register(data.email, data.password)
       .then(res => {
         // console.log('res', res);
-        addUser(data.email, data.username, res.user.uid).then(
+        addUser(data.email, data.name, res.user.uid, data.bio).then(
           () => console.log('Data set.'),
+          showSuccess('Register successfully.'),
           navigation.navigate('LoginScreen'),
         );
         setLoading(false);
       })
       .catch(err => {
         console.log('err', err);
+        showError(err.message);
         setLoading(false);
       });
-  };
-
-  const onRegisterWithRDB = async data => {
-    let Formdata = {
-      id: uuid.v4(),
-      name: data.username,
-      emailId: data.email,
-      password: data.password,
-    };
-    try {
-      database()
-        .ref('/users/' + Formdata.id)
-        .set(Formdata)
-        .then(() => {
-          Alert.alert('Success', 'Register Successfully!');
-          navigation.navigate('LoginScreen');
-        });
-    } catch (error) {
-      Alert.alert('Error', error);
-    }
   };
 
   return (
@@ -66,6 +45,17 @@ export default function Register({navigation}) {
 
           <View style={styles.form}>
             <CustomInput
+              testID="input-name"
+              label="Full Name"
+              name="name"
+              iconPosition="right"
+              placeholder="Enter full name"
+              control={control}
+              rules={{
+                required: 'Full name is required',
+              }}
+            />
+            <CustomInput
               testID="input-email"
               label="Email"
               name="email"
@@ -75,17 +65,6 @@ export default function Register({navigation}) {
               rules={{
                 required: 'Email is required',
                 pattern: {value: EMAIL_REGEX, message: 'Email is invalid'},
-              }}
-            />
-            <CustomInput
-              testID="input-username"
-              label="Username"
-              name="username"
-              iconPosition="right"
-              placeholder="Enter Username"
-              control={control}
-              rules={{
-                required: 'Username is required',
               }}
             />
             <CustomInput
@@ -121,13 +100,21 @@ export default function Register({navigation}) {
                 </TouchableOpacity>
               }
             />
+            <CustomInput
+              testID="input-bio"
+              label="Bio (opstional)"
+              name="bio"
+              iconPosition="right"
+              placeholder="Enter bio"
+              control={control}
+            />
             <CustomButton
               testID="btn-login"
               primary
               loading={loading}
               disabled={loading}
               title="REGISTER"
-              onPress={handleSubmit(onRegisterWithRDB)}
+              onPress={handleSubmit(onSignUp)}
             />
 
             <View style={styles.createSection}>
