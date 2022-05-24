@@ -1,5 +1,6 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
+import FlashMessage from 'react-native-flash-message';
 import Router from './routes';
 
 export default function App() {
@@ -7,6 +8,7 @@ export default function App() {
     <>
       <NavigationContainer>
         <Router />
+        <FlashMessage position="top" />
       </NavigationContainer>
     </>
   );
