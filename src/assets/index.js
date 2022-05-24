@@ -1,2 +1,2 @@
 export * from './jsons';
-export * from './images'
+export * from './images';
