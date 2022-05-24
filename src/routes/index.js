@@ -7,13 +7,14 @@ import {
   CrudScreen,
   DashboardUser,
   Chat,
+  ProfileScreen,
 } from '../screens';
 
 const Stack = createNativeStackNavigator();
 
 function Router() {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="ProfileScreen">
       <Stack.Screen
         name="SplashScreen"
         component={Splash}
@@ -44,6 +45,7 @@ function Router() {
         component={Chat}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }
