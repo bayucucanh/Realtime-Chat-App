@@ -18,7 +18,7 @@ export default function ProfileScreen() {
           style={{
             width: 120,
             height: 120,
-            marginTop: 20,
+            marginTop: 50,
             marginLeft: 15,
             alignSelf: 'center',
           }}
@@ -29,18 +29,6 @@ export default function ProfileScreen() {
         <View style={{alignSelf: 'center', marginTop: -30, marginLeft: 90}}>
           <Ionicons name="camera" size={50} color={'lightgrey'} />
         </View>
-        <Text
-          style={{
-            fontFamily: 'Poppins-SemiBold',
-            fontSize: SIZES.h2,
-            lineHeight: 30,
-            textAlign: 'center',
-          }}>
-          Nama Pengguna
-        </Text>
-        <View style={{marginLeft: 295, marginTop: -25}}>
-          <Ionicons name="create-outline" size={20} color={'black'} />
-        </View>
       </View>
       <View
         style={{
@@ -48,24 +36,31 @@ export default function ProfileScreen() {
           width: 380,
           height: 60,
           alignSelf: 'center',
-          flexDirection: 'row',
           marginTop: 40,
           borderRadius: 10,
         }}>
-        <Ionicons name="alert-circle-outline" size={20} color={'black'} />
+        <Text
+          style={{
+            fontFamily: 'Poppins-SemiBold',
+            fontSize: SIZES.body4,
+            lineHeight: 22,
+            marginLeft: 5,
+            marginTop: 3,
+          }}>
+          Nama
+        </Text>
         <View>
           <Text
             style={{
-              fontFamily: 'Poppins-Regular',
-              fontSize: SIZES.body2,
-              lineHeight: 22,
               marginLeft: 5,
+              fontFamily: 'Poppins-Regular',
+              fontSize: SIZES.body3,
+              lineHeight: 22,
             }}>
-            Bio
+            Nama Pengguna
           </Text>
-          <Text style={{marginLeft: 5}}>Bio Pengguna bebas diisi apa saja</Text>
-          <View style={{marginLeft: 340, marginTop: -5}}>
-            <Ionicons name="create-outline" size={20} color={'black'} />
+          <View style={{marginLeft: 345, marginTop: -34}}>
+            <Ionicons name="create-outline" size={30} color={'black'} />
           </View>
         </View>
       </View>
@@ -77,19 +72,65 @@ export default function ProfileScreen() {
           alignSelf: 'center',
           flexDirection: 'row',
           marginTop: 20,
-          marginLeft: 5,
           borderRadius: 10,
         }}>
-        <Ionicons name="mail-outline" size={20} color={'black'} />
+        <View style={{marginLeft: 5, marginTop: 3}}>
+          <Ionicons name="alert-circle-outline" size={20} color={'black'} />
+        </View>
         <Text
           style={{
-            fontFamily: 'Poppins-Regular',
-            fontSize: SIZES.body3,
+            fontFamily: 'Poppins-SemiBold',
+            fontSize: SIZES.body4,
             lineHeight: 22,
-            marginLeft: 5,
+            marginLeft: 3,
+            marginTop: 3,
           }}>
-          Email : Email Pengguna
+          Bio
         </Text>
+        <View style={{marginTop: 25, marginLeft: -50}}>
+          <Text
+            style={{
+              fontFamily: 'Poppins-regular',
+              fontSize: SIZES.body3,
+              lineHeight: 22,
+              marginLeft: 3,
+              marginTop: 3,
+            }}>
+            Biodata Pengguna Diisi Bebas
+          </Text>
+          <View style={{marginLeft: 345, marginTop: -37}}>
+            <Ionicons name="create-outline" size={30} color={'black'} />
+          </View>
+        </View>
+      </View>
+      <View
+        style={{
+          backgroundColor: '#FFFFFF',
+          width: 380,
+          height: 60,
+          alignSelf: 'center',
+          marginTop: 20,
+          borderRadius: 10,
+          flexDirection: 'row',
+        }}>
+        <View style={{marginLeft: 5, marginTop: 3}}>
+          <Ionicons name="mail-outline" size={20} color={'black'} />
+        </View>
+        <View>
+          <Text
+            style={{
+              fontFamily: 'Poppins-SemiBold',
+              fontSize: SIZES.body4,
+              lineHeight: 22,
+              marginLeft: 3,
+              marginTop: 3,
+            }}>
+            Email
+          </Text>
+        </View>
+        <View style={{marginTop: 25, marginLeft: -70}}>
+          <Text> Email Pengguna</Text>
+        </View>
       </View>
     </View>
   );
