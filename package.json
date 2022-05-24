@@ -19,7 +19,6 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "@rneui/base": "^4.0.0-rc.4",
-    "@rneui/themed": "^4.0.0-rc.4",
     "glob": "^7.2.0",
     "lottie-react-native": "^5.1.2",
     "moment": "^2.29.3",
