@@ -7,6 +7,7 @@ import {
   CrudScreen,
   DashboardUser,
   Chat,
+  ProfileScreen,
 } from '../screens';
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +45,7 @@ function Router() {
         component={Chat}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }
