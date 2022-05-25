@@ -1,139 +1,100 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {Avatar, ListItem} from '@rneui/base';
 import React from 'react';
-import {COLORS, SIZES, FONTS} from '../../themes';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {COLORS, FONTS} from '../../themes';
 
 export default function ProfileScreen() {
+  const CardInfo = ({icon, bottomDivider, label, content, edit}) => {
+    return (
+      <ListItem bottomDivider={bottomDivider}>
+        <Icon name={icon} size={20} color={COLORS.lightGray4} />
+        <ListItem.Content>
+          <ListItem.Subtitle style={styles.label} numberOfLines={1}>
+            {label}
+          </ListItem.Subtitle>
+          <ListItem.Title style={styles.labelTitle}>{content}</ListItem.Title>
+        </ListItem.Content>
+        {edit && (
+          <TouchableOpacity>
+            <Icon name="create" size={20} color={COLORS.primary} />
+          </TouchableOpacity>
+        )}
+      </ListItem>
+    );
+  };
   return (
-    <View style={{backgroundColor: '#1686ED', flex: 1}}>
-      <View
-        style={{
-          backgroundColor: '#1686ED',
-          width: 393,
-          height: 200,
-          alignSelf: 'center',
-          marginTop: 20,
-        }}>
-        <Image
-          style={{
-            width: 120,
-            height: 120,
-            marginTop: 50,
-            marginLeft: 15,
-            alignSelf: 'center',
-          }}
+    <View style={styles.container}>
+      <View style={styles.fotoProfile}>
+        <Avatar
+          size={160}
+          rounded
           source={{
-            uri: 'https://icon-library.com/images/profile-png-icon/profile-png-icon-2.jpg',
+            uri: 'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
           }}
         />
-        <View style={{alignSelf: 'center', marginTop: -30, marginLeft: 90}}>
-          <Ionicons name="camera" size={50} color={'lightgrey'} />
-        </View>
-      </View>
-      <View
-        style={{
-          backgroundColor: '#FFFFFF',
-          width: 380,
-          height: 60,
-          alignSelf: 'center',
-          marginTop: 40,
-          borderRadius: 10,
-        }}>
-        <Text
-          style={{
-            fontFamily: 'Poppins-SemiBold',
-            fontSize: SIZES.body4,
-            lineHeight: 22,
-            marginLeft: 5,
-            marginTop: 3,
-          }}>
-          Nama
-        </Text>
-        <View>
-          <Text
-            style={{
-              marginLeft: 5,
-              fontFamily: 'Poppins-Regular',
-              fontSize: SIZES.body3,
-              lineHeight: 22,
-            }}>
-            Nama Pengguna
-          </Text>
-          <View style={{marginLeft: 345, marginTop: -34}}>
-            <Ionicons name="create-outline" size={30} color={'black'} />
+        <TouchableOpacity style={styles.editAvatar}>
+          <View style={styles.camera}>
+            <Icon name="camera" size={20} color={COLORS.white} />
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
-      <View
-        style={{
-          backgroundColor: '#FFFFFF',
-          width: 380,
-          height: 60,
-          alignSelf: 'center',
-          flexDirection: 'row',
-          marginTop: 20,
-          borderRadius: 10,
-        }}>
-        <View style={{marginLeft: 5, marginTop: 3}}>
-          <Ionicons name="alert-circle-outline" size={20} color={'black'} />
-        </View>
-        <Text
-          style={{
-            fontFamily: 'Poppins-SemiBold',
-            fontSize: SIZES.body4,
-            lineHeight: 22,
-            marginLeft: 3,
-            marginTop: 3,
-          }}>
-          Bio
-        </Text>
-        <View style={{marginTop: 25, marginLeft: -50}}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-regular',
-              fontSize: SIZES.body3,
-              lineHeight: 22,
-              marginLeft: 3,
-              marginTop: 3,
-            }}>
-            Biodata Pengguna Diisi Bebas
-          </Text>
-          <View style={{marginLeft: 345, marginTop: -37}}>
-            <Ionicons name="create-outline" size={30} color={'black'} />
-          </View>
-        </View>
-      </View>
-      <View
-        style={{
-          backgroundColor: '#FFFFFF',
-          width: 380,
-          height: 60,
-          alignSelf: 'center',
-          marginTop: 20,
-          borderRadius: 10,
-          flexDirection: 'row',
-        }}>
-        <View style={{marginLeft: 5, marginTop: 3}}>
-          <Ionicons name="mail-outline" size={20} color={'black'} />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontFamily: 'Poppins-SemiBold',
-              fontSize: SIZES.body4,
-              lineHeight: 22,
-              marginLeft: 3,
-              marginTop: 3,
-            }}>
-            Email
-          </Text>
-        </View>
-        <View style={{marginTop: 25, marginLeft: -70}}>
-          <Text> Email Pengguna</Text>
-        </View>
+      <View style={styles.infoUser}>
+        <CardInfo
+          bottomDivider
+          icon="person"
+          label="Nama"
+          content="JohnDoe"
+          edit
+        />
+        <CardInfo
+          bottomDivider
+          icon="information-circle"
+          label="Bio"
+          content="Lorem ipsum dolor sit, amet consectetur adipisicing elit."
+          edit
+        />
+        <CardInfo icon="mail" label="Email" content="email@email.com" />
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.white,
+  },
+  fotoProfile: {
+    marginTop: 40,
+    alignSelf: 'center',
+  },
+  editAvatar: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    marginRight: 10,
+  },
+  camera: {
+    backgroundColor: COLORS.primary,
+    width: 45,
+    height: 45,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  infoUser: {
+    marginTop: 20,
+    marginHorizontal: 10,
+  },
+  label: {
+    ...FONTS.body4,
+    color: COLORS.lightGray,
+  },
+  labelTitle: {
+    ...FONTS.h3,
+  },
+  labelBio: {
+    ...FONTS.h3,
+  },
+});
