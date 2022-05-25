@@ -7,13 +7,16 @@ import {
   CrudScreen,
   DashboardUser,
   Chat,
+  TestComponent,
 } from '../screens';
+import Header from '../components/Header';
+import { Button } from '@rneui/base';
 
 const Stack = createNativeStackNavigator();
 
 function Router() {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="TestComponent">
       <Stack.Screen
         name="SplashScreen"
         component={Splash}
@@ -43,6 +46,13 @@ function Router() {
         name="ChatScreen"
         component={Chat}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TestComponent"
+        component={TestComponent}
+        options={{
+          headerTitle: () => <Header />
+        }}
       />
     </Stack.Navigator>
   );
