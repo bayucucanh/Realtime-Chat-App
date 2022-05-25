@@ -50,7 +50,7 @@ export default function Login({navigation}) {
             return false;
           }
           console.log('User data: ', userData);
-          navigation.navigate('DashboardUserScreen');
+          navigation.navigate('AllUser', {userData:userData});
         });
     } catch (error) {
       Alert.alert('Error', 'Not Found User');
@@ -112,7 +112,7 @@ export default function Login({navigation}) {
               testID="btn-login"
               primary
               title="LOGIN"
-              onPress={handleSubmit(onLogin)}
+              onPress={handleSubmit(onLoginRNDB)}
             />
 
             <View style={styles.createSection}>
