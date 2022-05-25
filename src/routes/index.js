@@ -8,13 +8,14 @@ import {
   DashboardUser,
   Chat,
   ProfileScreen,
+  SearchUser,
 } from '../screens';
 
 const Stack = createNativeStackNavigator();
 
 function Router() {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="DashboardUserScreen">
       <Stack.Screen
         name="SplashScreen"
         component={Splash}
@@ -43,6 +44,11 @@ function Router() {
       <Stack.Screen
         name="ChatScreen"
         component={Chat}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SearchUser"
+        component={SearchUser}
         options={{headerShown: false}}
       />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />

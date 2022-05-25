@@ -5,6 +5,7 @@ import CrudScreen from './CRUD';
 import DashboardUser from './DashboardUser';
 import Chat from './Chat';
 import ProfileScreen from './Profile';
+import SearchUser from './DashboardUser/SearchUser';
 
 export {
   Splash,
@@ -14,4 +15,5 @@ export {
   DashboardUser,
   Chat,
   ProfileScreen,
+  SearchUser,
 };
