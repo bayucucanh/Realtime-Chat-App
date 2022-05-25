@@ -80,9 +80,9 @@ const SearchUser = () => {
             .update(data)
             .then(() => console.log('Data updated.'));
 
-          navigation.navigate('SingleChat', {receiverData: data});
+          navigation.navigate('ChatScreen', {receiverData: data});
         } else {
-          navigation.navigate('SingleChat', {receiverData: snapshot.val()});
+          navigation.navigate('ChatScreen', {receiverData: snapshot.val()});
         }
       });
   };
@@ -101,7 +101,7 @@ const SearchUser = () => {
 
   return (
     <View style={styles.container}>
-      <Text>{search}</Text>
+      <View style={{marginBottom: 20}}></View>
       <SearchBar
         placeholder="Search Contact"
         onChangeText={text => searchUser(text)}
