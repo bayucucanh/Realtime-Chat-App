@@ -2,59 +2,44 @@ import LottieView from 'lottie-react-native';
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
+  Alert,
   ScrollView,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
-  Alert,
-  Text,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {LoginAnim} from '../../assets';
 import {CustomButton, CustomInput} from '../../components';
+import {getProfile, login} from '../../services';
 import {COLORS, FONTS, SIZES} from '../../themes';
 import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
-import {login} from '../../services';
-import database from '@react-native-firebase/database';
 
 export default function Login({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {control, handleSubmit} = useForm();
+  const [loading, setLoading] = useState(false);
 
   const onLogin = data => {
+    setLoading(true);
     login(data.email, data.password)
       .then(res => {
         console.log('res', res);
-        navigation.navigate('DashboardUserScreen');
-      })
-      .catch(err => {
-        console.log('err', err);
-      });
-  };
-
-  const onLoginRNDB = data => {
-    try {
-      database()
-        .ref('users/')
-        .orderByChild('emailId')
-        .equalTo(data.email)
-        .once('value')
-        .then(async snapshot => {
+        getProfile(data.email).then(async snapshot => {
           if (snapshot.val() == null) {
             Alert.alert('Invalid Email Id');
             return false;
           }
           let userData = Object.values(snapshot.val())[0];
-          if (userData?.password != data.password) {
-            Alert.alert('Error', 'Invalid Password!');
-            return false;
-          }
-          console.log('User data: ', userData);
-          navigation.navigate('DashboardUserScreen');
+          console.log('userData', userData);
         });
-    } catch (error) {
-      Alert.alert('Error', 'Not Found User');
-    }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log('err', err);
+        setLoading(false);
+      });
   };
 
   return (
@@ -111,6 +96,8 @@ export default function Login({navigation}) {
             <CustomButton
               testID="btn-login"
               primary
+              loading={loading}
+              disabled={loading}
               title="LOGIN"
               onPress={handleSubmit(onLogin)}
             />
