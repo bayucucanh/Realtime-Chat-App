@@ -1,6 +1,6 @@
-import {SET_USER} from './types';
+import {SET_USER} from '../types';
 
-export const setUser = data => ({
+export const setUser = value => ({
   type: SET_USER,
-  data: data,
+  payload: value,
 });
