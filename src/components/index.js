@@ -4,4 +4,13 @@ import ChatHeader from './ChatHeader';
 import MessageComp from './Chat/MessageComp';
 import SkeletonList from './SkeletonList';
 
-export {CustomButton, CustomInput, ChatHeader, MessageComp, SkeletonList};
+import EmptyState from './EmptyState';
+
+export {
+  CustomButton,
+  CustomInput,
+  ChatHeader,
+  MessageComp,
+  SkeletonList,
+  EmptyState,
+};

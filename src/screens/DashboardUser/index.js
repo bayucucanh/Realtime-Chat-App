@@ -39,17 +39,7 @@ export default function DashboardUser({navigation}) {
 
   const Header = () => {
     return (
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 10,
-          paddingHorizontal: 15,
-          backgroundColor: COLORS.primary,
-          elevation: 2,
-          paddingVertical: 15,
-        }}>
+      <View style={styles.headerWrapper}>
         <Text style={styles.logo}>Pacapa</Text>
         <TouchableOpacity
           style={{flexDirection: 'row', alignItems: 'center'}}
@@ -130,5 +120,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 5,
+  },
+  headerWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    paddingHorizontal: 15,
+    backgroundColor: COLORS.primary,
+    elevation: 2,
+    paddingVertical: 15,
   },
 });
