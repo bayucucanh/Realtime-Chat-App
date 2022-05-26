@@ -3,11 +3,11 @@ import React from 'react';
 import FlashMessage from 'react-native-flash-message';
 import Router from './routes';
 import {Provider} from 'react-redux';
-import {Store} from './store';
+import store from './store';
 
 export default function App() {
   return (
-    <Provider store={Store}>
+    <Provider store={store}>
       <NavigationContainer>
         <Router />
         <FlashMessage position="top" />
