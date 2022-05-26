@@ -10,34 +10,37 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {useDispatch} from 'react-redux';
 import {LoginAnim} from '../../assets';
 import {CustomButton, CustomInput} from '../../components';
 import {getProfile, login} from '../../services';
+import {setUser} from '../../store/actions';
 import {COLORS, FONTS, SIZES} from '../../themes';
-import {EMAIL_REGEX, PASSWORD_REGEX} from '../../utils';
+import {EMAIL_REGEX, PASSWORD_REGEX, showError} from '../../utils';
 
 export default function Login({navigation}) {
   const [isSecureEntry, setIsSecureEntry] = useState(true);
   const {control, handleSubmit} = useForm();
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const onLogin = data => {
     setLoading(true);
     login(data.email, data.password)
       .then(res => {
-        console.log('res', res);
         getProfile(data.email).then(async snapshot => {
           if (snapshot.val() == null) {
             Alert.alert('Invalid Email Id');
             return false;
           }
           let userData = Object.values(snapshot.val())[0];
-          console.log('userData', userData);
+          dispatch(setUser(userData));
         });
+        navigation.navigate('DashboardUserScreen');
         setLoading(false);
       })
       .catch(err => {
-        console.log('err', err);
+        showError(err);
         setLoading(false);
       });
   };
