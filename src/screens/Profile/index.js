@@ -1,13 +1,54 @@
-import {Avatar, ListItem} from '@rneui/base';
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {Avatar, ListItem, BottomSheet} from '@rneui/base';
+import React, {useState} from 'react';
+import {useForm} from 'react-hook-form';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useDispatch, useSelector} from 'react-redux';
+import {CustomButton, CustomInput} from '../../components';
 import {COLORS, FONTS} from '../../themes';
+import {showError, showSuccess} from '../../utils';
+import database from '@react-native-firebase/database';
+import {setUser} from '../../store/actions';
+import {getProfile} from '../../services';
 
 export default function ProfileScreen() {
-  const CardInfo = ({icon, bottomDivider, label, content, edit}) => {
+  const userProfile = useSelector(state => state.UserReducer.userData);
+  const [isVisible, setIsVisible] = useState(false);
+  const {control, handleSubmit, reset} = useForm({
+    defaultValues: {
+      name: userProfile.name,
+      bio: userProfile.bio,
+    },
+  });
+
+  const dispatch = useDispatch();
+
+  const resetModal = () => {
+    setIsVisible(false);
+    reset();
+  };
+
+  const updateProfile = async data => {
+    try {
+      await database()
+        .ref(`/users/${userProfile.id_user}`)
+        .update({name: data.name, bio: data.bio})
+        .then(ress => {
+          getProfile(userProfile.email).then(async snapshot => {
+            let userData = Object.values(snapshot.val())[0];
+            dispatch(setUser(userData));
+          });
+          setIsVisible(false);
+          showSuccess('Profile updated');
+        });
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const CardInfo = ({icon, topDivider, label, content, edit, onPress}) => {
     return (
-      <ListItem bottomDivider={bottomDivider}>
+      <ListItem topDivider={topDivider}>
         <Icon name={icon} size={20} color={COLORS.lightGray4} />
         <ListItem.Content>
           <ListItem.Subtitle style={styles.label} numberOfLines={1}>
@@ -16,7 +57,7 @@ export default function ProfileScreen() {
           <ListItem.Title style={styles.labelTitle}>{content}</ListItem.Title>
         </ListItem.Content>
         {edit && (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onPress}>
             <Icon name="create" size={20} color={COLORS.primary} />
           </TouchableOpacity>
         )}
@@ -30,7 +71,7 @@ export default function ProfileScreen() {
           size={160}
           rounded
           source={{
-            uri: 'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+            uri: userProfile.avatar,
           }}
         />
         <TouchableOpacity style={styles.editAvatar}>
@@ -41,21 +82,64 @@ export default function ProfileScreen() {
       </View>
       <View style={styles.infoUser}>
         <CardInfo
-          bottomDivider
           icon="person"
           label="Nama"
-          content="JohnDoe"
+          content={userProfile.name}
           edit
+          onPress={() => setIsVisible(true)}
         />
         <CardInfo
-          bottomDivider
           icon="information-circle"
           label="Bio"
-          content="Lorem ipsum dolor sit, amet consectetur adipisicing elit."
-          edit
+          content={userProfile.bio}
         />
-        <CardInfo icon="mail" label="Email" content="email@email.com" />
+        <CardInfo
+          topDivider
+          icon="mail"
+          label="Email"
+          content={userProfile.email}
+        />
       </View>
+      <BottomSheet isVisible={isVisible} onBackdropPress={resetModal}>
+        <View style={styles.form}>
+          <CustomInput
+            testID="input-name"
+            label="Nama"
+            name="name"
+            iconPosition="right"
+            placeholder="Enter Name"
+            control={control}
+            rules={{
+              required: 'Name is required',
+            }}
+          />
+          <CustomInput
+            testID="input-bio"
+            label="Bio"
+            name="bio"
+            iconPosition="right"
+            placeholder="Enter Bio"
+            control={control}
+            rules={{
+              required: 'Bio is required',
+            }}
+          />
+          <View style={styles.buttonAction}>
+            <CustomButton
+              style={styles.btnStyle}
+              secondary
+              onPress={resetModal}
+              title="Cancel"
+            />
+            <CustomButton
+              style={styles.btnStyle}
+              primary
+              title="Save"
+              onPress={handleSubmit(updateProfile)}
+            />
+          </View>
+        </View>
+      </BottomSheet>
     </View>
   );
 }
@@ -68,6 +152,13 @@ const styles = StyleSheet.create({
   fotoProfile: {
     marginTop: 40,
     alignSelf: 'center',
+  },
+  form: {
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    backgroundColor: COLORS.white,
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20,
   },
   editAvatar: {
     position: 'absolute',
@@ -96,5 +187,14 @@ const styles = StyleSheet.create({
   },
   labelBio: {
     ...FONTS.h3,
+  },
+  buttonAction: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  btnStyle: {
+    marginLeft: 10,
+    width: '20%',
   },
 });
