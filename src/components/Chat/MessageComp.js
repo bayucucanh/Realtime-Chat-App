@@ -1,23 +1,29 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect, useCallback} from 'react';
-
 import TimeDelivery from './TimeDelivery';
+import { COLORS } from '../../themes';
 
-const MessageComp = () => {
+const MessageComp = ({item, sender}) => {
+
+  console.log('item', item);
+  console.log('sender', sender);
+
   return (
     <TouchableOpacity style={{marginVertical: 0}}>
-      <View style={[(styles.triangleCSS, styles.right)]} />
+      <View
+        style={[(styles.triangleCSS, sender ? styles.right : [styles.left])]}
+      />
       <View
         style={[
           styles.msgBox,
           {
-            alignSelf: 'flex-end',
+            alignSelf: sender ? 'flex-end' : 'flex-start',
             // borderWidth:1,
-            backgroundColor: '#0a2141',
+            backgroundColor: sender ? COLORS.primary : '#fff',
           },
         ]}>
-        <Text style={{color: '#fff', fontSize: 13}}>Apa kaps zelenzky?</Text>
-        <TimeDelivery />
+        <Text style={{color:  sender ? '#fff': '#000',fontSize:13 }}>{item.message}</Text>
+        <TimeDelivery sender={sender} item={item}/>
       </View>
     </TouchableOpacity>
   );
@@ -56,13 +62,13 @@ const styles = StyleSheet.create({
     transform: [{rotate: '103deg'}],
   },
   left: {
-    borderBottomColor: '#fff',
+    borderBottomColor:'#fff',
     left: 2,
     bottom: 10,
     transform: [{rotate: '0deg'}],
   },
   right: {
-    borderBottomColor: '#0a2141',
+    borderBottomColor:'#0a2141',
     right: 2,
     // top:0,
     bottom: 5,

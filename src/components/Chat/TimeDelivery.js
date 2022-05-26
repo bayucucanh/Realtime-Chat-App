@@ -1,8 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import moment from 'moment';
 
-const TimeDelivery = () => {
+const TimeDelivery = props => {
+  const {item, sender} = props;
+
   return (
     <View
       style={[
@@ -15,15 +18,14 @@ const TimeDelivery = () => {
         style={{
           fontFamily: 'Poppins-Regular',
           fontSize: 7,
-          color: '#fff',
+          color: sender ? '#fff' : '#000',
         }}>
-        {/* {moment(item.sendTime).format('LLL')} */}
-        Juni 2023 11:31 WIB
+        {moment(item.sendTime).format('LLL')}
       </Text>
       <Icon
         name={'check-all'}
         style={{
-          color: '#000',
+          color: item.seen ? '#000': '#fff',
           fontSize: 15,
           marginLeft: 5,
         }}

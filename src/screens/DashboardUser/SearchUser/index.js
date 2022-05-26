@@ -1,27 +1,24 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  TouchableOpacity,
   Image,
+  TouchableOpacity,
+  FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import SearchBar from 'react-native-dynamic-search-bar';
-import database from '@react-native-firebase/database';
-import {useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {SearchBar} from '@rneui/base';
+import { COLORS } from '../../../themes';
+import React, {useState, useEffect} from 'react';
 import uuid from 'react-native-uuid';
+import database from '@react-native-firebase/database';
+import { useSelector } from 'react-redux';
 
-const SearchUser = () => {
-  const navigation = useNavigation();
+const SearchUser = props => {
+  const userProfile = useSelector(state => state.UserReducer.userData);
 
   const [search, setSearch] = useState('');
   const [allUser, setAllUser] = useState([]);
-  const [allUserBackup, setallUserBackup] = useState([]);
-
-  const user = useSelector(state => state.userData);
+  const [allUserBackUp, setAllUserBackUp] = useState([]);
 
   useEffect(() => {
     getAllUser();
@@ -29,27 +26,24 @@ const SearchUser = () => {
 
   const getAllUser = () => {
     database()
-      .ref('/users/')
+      .ref('users')
       .once('value')
       .then(snapshot => {
         console.log('All User data: ', Object.values(snapshot.val()));
-        setAllUser(
-          Object.values(snapshot.val()).filter(it => it.id != user.id),
-        );
-        setallUserBackup(
-          Object.values(snapshot.val()).filter(it => it.id != user.id),
-        );
+        setAllUser(Object.values(snapshot.val()).filter(it => it.id_user != userProfile.id_user));
+        setAllUserBackUp(Object.values(snapshot.val()).filter(it => it.id_user != userProfile.id_user));
       });
   };
 
-  const searchUser = val => {
+  const searchuser = val => {
     setSearch(val);
-    setAllUser(allUserBackup.filter(it => it.name.match(val)));
+    setAllUser(allUserBackUp.filter(it => it.name === val));
   };
 
   const createChatList = data => {
+      console.log('Data', data);
     database()
-      .ref('users/' + user.id + '/' + data.id)
+      .ref('/chatlist/' + userProfile.id_user + '/' + data.id_user)
       .once('value')
       .then(snapshot => {
         console.log('User data: ', snapshot.val());
@@ -58,16 +52,16 @@ const SearchUser = () => {
           let roomId = uuid.v4();
           const newData = {
             roomId,
-            id: user.id,
-            name: user.name,
-            image: user.image,
-            emailId: user.emailId,
-            about: user.about,
+            id_user: userProfile.id_user,
+            name: userProfile.name,
+            avatar: userProfile.avatar,
+            emailId: userProfile.emailId,
+            bio: userProfile.bio,
             lastMessage: '',
           };
 
           database()
-            .ref('users/')
+            .ref('/chatlist/' + data.id_user + '/' + userProfile.id_user)
             .update(newData)
             .then(() => console.log('Data updated.'));
 
@@ -76,43 +70,61 @@ const SearchUser = () => {
           data.roomId = roomId;
 
           database()
-            .ref('users/')
+            .ref('/chatlist/' + userProfile.id_user + '/' + data.id_user)
             .update(data)
             .then(() => console.log('Data updated.'));
 
-          navigation.navigate('ChatScreen', {receiverData: data});
+          props.navigation.navigate('ChatScreen', {receiverData: data});
         } else {
-          navigation.navigate('ChatScreen', {receiverData: snapshot.val()});
+          props.navigation.navigate('ChatScreen', {receiverData: snapshot.val()});
         }
       });
   };
 
   const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => createChatList(item)}
-      style={styles.wrapper}>
-      <Image source={{uri: item.image}} style={styles.imageProfile} />
-      <View>
-        <Text style={styles.nameUser}>{item.name}</Text>
-        <Text>{item.about}</Text>
+    <TouchableOpacity style={styles.listUser} onPress={()=> createChatList(item)}>
+      <Image
+        source={{
+          uri: item.avatar,
+        }}
+        style={styles.avatar}
+      />
+      <View style={styles.infoUser}>
+        <Text style={styles.nameContact}> {item.name} </Text>
+        <Text style={styles.textMassage}> {item.bio} </Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      <View style={{marginBottom: 20}}></View>
+    <View>
       <SearchBar
-        placeholder="Search Contact"
-        onChangeText={text => searchUser(text)}
+        placeholder="Search by Name"
+        containerStyle={styles.searchContainer}
+        onChangeText={val => searchuser(val)}
         value={search}
-        onPress={event => alert(event)}
       />
       <FlatList
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         data={allUser}
         renderItem={renderItem}
+        // renderItem={({item}) => {
+        //   return (
+        //     <TouchableOpacity style={styles.listUser}>
+        //       <Image
+        //         source={{
+        //           uri: item.avatar,
+        //         }}
+        //         style={styles.avatar}
+        //       />
+        //       <View style={styles.infoUser}>
+        //         <Text style={styles.nameContact}> {item.name} </Text>
+        //         <Text style={styles.textMassage}> {item.bio} </Text>
+        //       </View>
+        //     </TouchableOpacity>
+        //   );
+        // }}
       />
     </View>
   );
@@ -121,28 +133,31 @@ const SearchUser = () => {
 export default SearchUser;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafe',
+  searchContainer: {
+    backgroundColor: COLORS.secondary,
   },
-  wrapper: {
-    marginHorizontal: 12,
-    marginTop: 14,
+  listUser: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    marginTop: 12,
+    marginHorizontal: 10,
     padding: 10,
-    borderRadius: 5,
+    backgroundColor: COLORS.lightGray2,
   },
-  imageProfile: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    marginRight: 15,
+  infoUser: {
+    flexDirection: 'column',
+    marginTop: 5,
+    marginLeft: 15,
   },
-  nameUser: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
-    marginTop: 4,
+  avatar: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+  },
+  nameContact: {
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
+  textMassage: {
+    fontSize: 13,
   },
 });

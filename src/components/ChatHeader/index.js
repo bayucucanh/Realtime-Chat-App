@@ -4,18 +4,20 @@ import { COLORS } from '../../themes';
 import Icon from 'react-native-vector-icons/dist/Feather';
 
 const ChatHeader = props => {
+  const {data} = props;
+
   return (
     <View style={styles.container}>
       <View style={styles.left}>
         <Image
           source={{
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Volodymyr_Zelensky_Official_portrait.jpg/1512px-Volodymyr_Zelensky_Official_portrait.jpg',
+            uri: data.avatar,
           }}
           style={styles.photoProfile}
         />
         <View>
-          <Text style={styles.nameUser}>Bayu</Text>
-          <Text style={{color: '#747475'}}>online</Text>
+          <Text style={styles.nameUser}>{data.name}</Text>
+          <Text style={{color: '#fff'}}>online</Text>
         </View>
       </View>
       <View style={styles.right}>
@@ -34,7 +36,7 @@ export default ChatHeader;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.darkBlue,
+    backgroundColor: COLORS.primary,
     padding: 17,
     flexDirection: 'row',
     justifyContent: 'space-between',
