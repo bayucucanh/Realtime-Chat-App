@@ -51,7 +51,8 @@ function Router() {
         name="TestComponent"
         component={TestComponent}
         options={{
-          headerTitle: () => <Header />
+          // headerTitle: () => <Header />
+          headerShown: false
         }}
       />
     </Stack.Navigator>

@@ -1,11 +1,18 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import AppHeader from '../../components/Header'
 
 export default function TestComponent() {
-
   return (
-    <View style={styles.header}>
-      <View>
+    <View>
+      <AppHeader 
+        title="Pacapa Chat app" iconColor='#fff'
+        logo
+        back
+        // right="search"
+        // optionalBtn=""
+      />
+      <View style={styles.header}>
         <Text style={styles.headerText}>TestComponent</Text>
       </View>
     </View>
