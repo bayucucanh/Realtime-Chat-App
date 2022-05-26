@@ -34,6 +34,7 @@ export default function Login({navigation}) {
             return false;
           }
           let userData = Object.values(snapshot.val())[0];
+          console.log(userData);
           dispatch(setUser(userData));
         });
         navigation.navigate('DashboardUserScreen');

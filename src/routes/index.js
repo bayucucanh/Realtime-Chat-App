@@ -51,7 +51,7 @@ function Router() {
         component={SearchUser}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }

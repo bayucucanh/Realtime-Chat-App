@@ -1,7 +1,7 @@
 import {Avatar, ListItem, BottomSheet} from '@rneui/base';
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {CustomButton, CustomInput} from '../../components';
@@ -10,10 +10,13 @@ import {showError, showSuccess} from '../../utils';
 import database from '@react-native-firebase/database';
 import {setUser} from '../../store/actions';
 import {getProfile} from '../../services';
+import ImagePicker from 'react-native-image-crop-picker';
 
 export default function ProfileScreen() {
   const userProfile = useSelector(state => state.UserReducer.userData);
   const [isVisible, setIsVisible] = useState(false);
+  const [modalAvatar, setModalAvatar] = useState(false);
+  const [image, setImage] = useState(null);
   const {control, handleSubmit, reset} = useForm({
     defaultValues: {
       name: userProfile.name,
@@ -26,6 +29,10 @@ export default function ProfileScreen() {
   const resetModal = () => {
     setIsVisible(false);
     reset();
+  };
+
+  const resetModalImage = () => {
+    setModalAvatar(false);
   };
 
   const updateProfile = async data => {
@@ -44,6 +51,32 @@ export default function ProfileScreen() {
     } catch (error) {
       showError(error);
     }
+  };
+
+  const takePhotoFromCamera = () => {
+    setModalAvatar(false);
+    ImagePicker.openCamera({
+      width: 1200,
+      height: 780,
+      cropping: true,
+    }).then(val => {
+      console.log(val);
+      const imageUri = Platform.OS === 'ios' ? val.sourceURL : val.path;
+      setImage(imageUri);
+    });
+  };
+
+  const choosePhotoFromLibrary = () => {
+    setModalAvatar(false);
+    ImagePicker.openPicker({
+      width: 1200,
+      height: 780,
+      cropping: true,
+    }).then(val => {
+      console.log(val);
+      const imageUri = Platform.OS === 'ios' ? val.sourceURL : val.path;
+      setImage(imageUri);
+    });
   };
 
   const CardInfo = ({icon, topDivider, label, content, edit, onPress}) => {
@@ -74,7 +107,9 @@ export default function ProfileScreen() {
             uri: userProfile.avatar,
           }}
         />
-        <TouchableOpacity style={styles.editAvatar}>
+        <TouchableOpacity
+          style={styles.editAvatar}
+          onPress={() => setModalAvatar(true)}>
           <View style={styles.camera}>
             <Icon name="camera" size={20} color={COLORS.white} />
           </View>
@@ -138,6 +173,22 @@ export default function ProfileScreen() {
               onPress={handleSubmit(updateProfile)}
             />
           </View>
+        </View>
+      </BottomSheet>
+      <BottomSheet isVisible={modalAvatar} onBackdropPress={resetModalImage}>
+        <View style={styles.form}>
+          <CustomButton
+            primary
+            icon={<Icon name="camera" size={20} color={COLORS.white} />}
+            title="Take Photo"
+            onPress={takePhotoFromCamera}
+          />
+          <CustomButton
+            secondary
+            icon={<Icon name="image" size={20} color={COLORS.white} />}
+            title="Choose Photo"
+            onPress={choosePhotoFromLibrary}
+          />
         </View>
       </BottomSheet>
     </View>

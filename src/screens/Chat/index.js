@@ -41,15 +41,15 @@ export default function ChatScreen(props) {
         .off('child_added', onChildAdd);
   }, [receiverData.roomId]);
 
-  const msgvalid = txt => txt && txt.replace(/\s/g, '').length;
+  // const msgvalid = txt => txt && txt.replace(/\s/g, '').length;
 
   const sendMessage = () => {
-    if (message === '' || msgvalid(message) == 0) {
-      alert('Enter something....');
-      return false;
-    }
+    // if (message === '' || msgvalid(message) == 0) {
+    //   alert('Enter something....');
+    //   return false;
+    // }
 
-    setDisabled(true)
+    setDisabled(true);
 
     let messageData = {
       roomId: receiverData.roomId,
@@ -68,7 +68,7 @@ export default function ChatScreen(props) {
     newReference.set(messageData).then(() => {
       let chatListUpdate = {
         lastMessage: message,
-        sendTime: messageData.sendTime
+        sendTime: messageData.sendTime,
       };
 
       database()
@@ -81,14 +81,14 @@ export default function ChatScreen(props) {
         .update(chatListUpdate)
         .then(() => console.log('Data updated.'));
 
-        setmessage('')
-        setDisabled(false)
+      setmessage('');
+      setDisabled(false);
     });
   };
 
   return (
     <View style={{position: 'relative', flex: 1}}>
-      <ChatHeader data={receiverData}/>
+      <ChatHeader data={receiverData} />
       <ImageBackground source={BackgroundChat} style={{flex: 1}}>
         <FlatList
           style={{flex: 1}}
@@ -97,7 +97,12 @@ export default function ChatScreen(props) {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index}
           renderItem={({item}) => {
-            return <MessageComp sender={item.from == userProfile.id_user} item={item} />;
+            return (
+              <MessageComp
+                sender={item.from == userProfile.id_user}
+                item={item}
+              />
+            );
           }}
         />
       </ImageBackground>
@@ -109,9 +114,11 @@ export default function ChatScreen(props) {
           onChangeText={text => setmessage(text)}
           value={message}
         />
-        <TouchableOpacity onPress={sendMessage}>
-          <Icon name="send" size={25} color={COLORS.white} />
-        </TouchableOpacity>
+        {message !== '' && (
+          <TouchableOpacity onPress={sendMessage} style={styles.btnSend}>
+            <Icon name="send" size={25} color={COLORS.white} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -123,16 +130,20 @@ const styles = StyleSheet.create({
     elevation: 2,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 7,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     justifyContent: 'space-evenly',
   },
   msgInput: {
+    flex: 1,
     backgroundColor: '#fff',
-    width: '80%',
     borderRadius: 16,
     borderWidth: 0.5,
     borderColor: '#fff',
     paddingHorizontal: 15,
     color: '#000',
+  },
+  btnSend: {
+    marginLeft: 15,
   },
 });

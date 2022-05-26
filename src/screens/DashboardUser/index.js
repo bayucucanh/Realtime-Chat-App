@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import database from '@react-native-firebase/database';
 import {Avatar, ListItem} from '@rneui/base';
@@ -16,23 +17,23 @@ import {SkeletonList} from '../../components';
 import {COLORS, FONTS} from '../../themes';
 
 export default function DashboardUser({navigation}) {
-  const [allUser, setallUser] = useState([]);
+  const [chatList, setchatList] = useState([]);
   const [loading, setloading] = useState(false);
 
   const userProfile = useSelector(state => state.UserReducer.userData);
 
   useEffect(() => {
-    getAllUser();
+    getChatlist();
   }, []);
 
-  const getAllUser = () => {
+  const getChatlist = async () => {
     setloading(true);
     database()
-      .ref('users/')
-      .once('value')
-      .then(snapshot => {
-        console.log('all User data: ', Object.values(snapshot.val()));
-        setallUser(Object.values(snapshot.val()));
+      .ref('/chatlist/' + userProfile.id_user)
+      .on('value', snapshot => {
+        if (snapshot.val() != null) {
+          setchatList(Object.values(snapshot.val()));
+        }
         setloading(false);
       });
   };
@@ -43,7 +44,7 @@ export default function DashboardUser({navigation}) {
         <Text style={styles.logo}>Pacapa</Text>
         <TouchableOpacity
           style={{flexDirection: 'row', alignItems: 'center'}}
-          onPress={() => navigation.navigate('ProfileScreen')}>
+          onPress={() => navigation.navigate('Profile')}>
           <Avatar
             source={{
               uri: userProfile.avatar,
@@ -72,13 +73,11 @@ export default function DashboardUser({navigation}) {
             size="medium"
           />
           <ListItem.Content>
-            <ListItem.Title style={{fontFamily: FONTS.Medium, fontSize: 14}}>
+            <ListItem.Title style={{...FONTS.body3}}>
               {item.name}
             </ListItem.Title>
-            <ListItem.Subtitle
-              style={{fontFamily: FONTS.Regular, fontSize: 12}}
-              numberOfLines={1}>
-              {item.subtitle}
+            <ListItem.Subtitle style={{...FONTS.body4}} numberOfLines={1}>
+              {item.lastMessage}
             </ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
@@ -92,7 +91,7 @@ export default function DashboardUser({navigation}) {
       <FlatList
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
-        data={allUser}
+        data={chatList}
         renderItem={renderItem}
       />
       <TouchableOpacity

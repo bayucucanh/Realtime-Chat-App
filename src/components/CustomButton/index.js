@@ -1,10 +1,7 @@
-/* eslint-disable consistent-return */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {
-  ActivityIndicator, Text, TouchableOpacity, View,
-} from 'react-native';
-import { COLORS } from '../../themes';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
+import {COLORS} from '../../themes';
 import styles from './styles';
 
 function CustomButton({
@@ -39,8 +36,7 @@ function CustomButton({
       testID={testID}
       disabled={disabled}
       onPress={onPress}
-      style={[styles.wrapper, { backgroundColor: getBgColor() }, style]}
-    >
+      style={[styles.wrapper, {backgroundColor: getBgColor()}, style]}>
       <View style={[styles.loaderSection]}>
         {loading && (
           <ActivityIndicator color={primary ? COLORS.black : COLORS.primary} />
@@ -51,8 +47,7 @@ function CustomButton({
             style={{
               color: disabled ? 'black' : COLORS.white,
               paddingLeft: loading || icon ? 10 : 0,
-            }}
-          >
+            }}>
             {loading ? 'Please wait...' : title}
           </Text>
         )}
