@@ -1,4 +1,6 @@
 import {createStore} from 'redux';
-import {GlobalReducer} from './reducers';
+import reducer from './reducers';
 
-export const Store = createStore(GlobalReducer);
+const store = createStore(reducer);
+
+export default store;

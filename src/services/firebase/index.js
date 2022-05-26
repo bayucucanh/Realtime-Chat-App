@@ -17,7 +17,7 @@ export const addUser = (email, name, uid, bio) =>
       email: email,
       name: name,
       bio: bio || 'my bio',
-      avatar: `https://ui-avatars.com/api/?background=random&name=${name}`,
+      avatar: 'https://i.pravatar.cc/300',
     });
 
 export const getProfile = email =>

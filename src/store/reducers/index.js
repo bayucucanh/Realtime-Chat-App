@@ -1,20 +1,8 @@
-import {SET_USER} from '../types';
+import {combineReducers} from 'redux';
+import {UserReducer} from './user';
 
-const initialState = {
-  userData: {},
-  isLogin: false,
-};
+const reducer = combineReducers({
+  UserReducer,
+});
 
-export const GlobalReducer = (state = initialState, action = {}) => {
-  switch (action.type) {
-    case SET_USER:
-      return {
-        ...state,
-        userData: action.data,
-        isLogin: true,
-      };
-
-    default:
-      return state;
-  }
-};
+export default reducer;
