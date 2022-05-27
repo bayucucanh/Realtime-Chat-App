@@ -27,6 +27,7 @@ export default function ChatScreen(props) {
   const [allChat, setAllChat] = useState([]);
 
   useEffect(() => {
+    let isMounted = true; // useEffect will be called only once
     const onChildAdd = database()
       .ref('/messages/' + receiverData.roomId)
       .on('child_added', snapshot => {
@@ -35,10 +36,12 @@ export default function ChatScreen(props) {
       });
 
     // Stop listening for updates when no longer required
-    return () =>
+    return () => {
       database()
         .ref('/messages/' + receiverData.roomId)
         .off('child_added', onChildAdd);
+      isMounted = false;
+    };
   }, [receiverData.roomId]);
 
   // const msgvalid = txt => txt && txt.replace(/\s/g, '').length;
