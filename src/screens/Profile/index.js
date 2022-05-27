@@ -13,11 +13,11 @@ import {
   OverlayLoading,
 } from '../../components';
 import {getProfile} from '../../services';
-import {setUser} from '../../store/actions';
-import {COLORS} from '../../themes';
+import {logoutUser, setUser} from '../../store/actions';
+import {COLORS, SIZES} from '../../themes';
 import {showError, showSuccess, withCamera, withGallery} from '../../utils';
 
-export default function ProfileScreen() {
+export default function ProfileScreen({navigation}) {
   const userProfile = useSelector(state => state.UserReducer.userData);
   const [isVisible, setIsVisible] = useState(false);
   const [modalAvatar, setModalAvatar] = useState(false);
@@ -32,6 +32,11 @@ export default function ProfileScreen() {
   });
 
   const dispatch = useDispatch();
+
+  // Logout
+  const onLogout = () => {
+    dispatch(logoutUser());
+  };
 
   const resetModalProfile = () => {
     setIsVisible(false);
@@ -184,6 +189,14 @@ export default function ProfileScreen() {
             content={userProfile.email}
           />
         </View>
+        <View style={styles.buttonWrapper}>
+          <CustomButton
+            icon={<Icon name="log-out" size={20} color={COLORS.white} />}
+            danger
+            title="Logout"
+            onPress={onLogout}
+          />
+        </View>
         {/* Modal Update Info User */}
         <BottomSheet isVisible={isVisible} onBackdropPress={resetModalProfile}>
           <View style={styles.form}>
@@ -290,5 +303,11 @@ const styles = StyleSheet.create({
   btnStyle: {
     marginLeft: 10,
     width: '20%',
+  },
+  buttonWrapper: {
+    width: SIZES.width * 0.9,
+    position: 'absolute',
+    bottom: 19,
+    alignSelf: 'center',
   },
 });
