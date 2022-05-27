@@ -46,7 +46,11 @@ const SearchUser = props => {
 
   const searchuser = val => {
     setSearch(val);
-    setAllUser(allUserBackUp.filter(x => x.name.toLowerCase().includes(val)));
+    setAllUser(
+      allUserBackUp.filter(x =>
+        x.name.toLowerCase().includes(val.toLowerCase()),
+      ),
+    );
   };
 
   const createChatList = data => {
