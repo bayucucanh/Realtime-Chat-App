@@ -35,7 +35,7 @@ export default function ProfileScreen({navigation}) {
 
   // Logout
   const onLogout = () => {
-    dispatch(logoutUser());
+    dispatch(logoutUser(navigation));
   };
 
   const resetModalProfile = () => {
