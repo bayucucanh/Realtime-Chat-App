@@ -60,40 +60,38 @@ export default function DashboardUser({navigation}) {
   const renderItem = ({item}) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('ChatScreen', {receiverData: item})}>
-      {loading ? (
-        <SkeletonList />
-      ) : (
-        <ListItem
-          containerStyle={{paddingVertical: 8, marginVertical: 0}}
-          bottomDivider>
-          <Avatar
-            source={{uri: item.avatar}}
-            rounded
-            title={item.name}
-            size="medium"
-          />
-          <ListItem.Content>
-            <ListItem.Title style={{...FONTS.body3}}>
-              {item.name}
-            </ListItem.Title>
-            <ListItem.Subtitle style={{...FONTS.body4}} numberOfLines={1}>
-              {item.lastMessage}
-            </ListItem.Subtitle>
-          </ListItem.Content>
-        </ListItem>
-      )}
+      <ListItem
+        containerStyle={{paddingVertical: 8, marginVertical: 0}}
+        bottomDivider>
+        <Avatar
+          source={{uri: item.avatar}}
+          rounded
+          title={item.name}
+          size="medium"
+        />
+        <ListItem.Content>
+          <ListItem.Title style={{...FONTS.body3}}>{item.name}</ListItem.Title>
+          <ListItem.Subtitle style={{...FONTS.body4}} numberOfLines={1}>
+            {item.lastMessage}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem>
     </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
       <Header />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        data={chatList}
-        renderItem={renderItem}
-      />
+      {loading ? (
+        <SkeletonList />
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          data={chatList}
+          renderItem={renderItem}
+        />
+      )}
       <TouchableOpacity
         style={styles.but}
         onPress={() => navigation.navigate('SearchUser')}>
