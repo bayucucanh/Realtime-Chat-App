@@ -15,6 +15,8 @@ export default StyleSheet.create({
 
   loaderSection: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   textInput: {
