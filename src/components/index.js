@@ -6,6 +6,10 @@ import SkeletonList from './SkeletonList';
 
 import EmptyState from './EmptyState';
 
+import OverlayLoading from './OverlayLoading';
+
+import CardInfo from './CardInfo';
+
 export {
   CustomButton,
   CustomInput,
@@ -13,4 +17,6 @@ export {
   MessageComp,
   SkeletonList,
   EmptyState,
+  OverlayLoading,
+  CardInfo,
 };

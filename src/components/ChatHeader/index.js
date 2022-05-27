@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React from 'react';
-import { COLORS } from '../../themes';
+import {COLORS} from '../../themes';
 import Icon from 'react-native-vector-icons/dist/Feather';
 
 const ChatHeader = props => {
@@ -21,7 +21,7 @@ const ChatHeader = props => {
         </View>
       </View>
       <View style={styles.right}>
-        <TouchableOpacity style={{ marginRight: 20 }}>
+        <TouchableOpacity style={{marginRight: 20}}>
           <Icon name="video" size={21} color="#fbfbfb" />
         </TouchableOpacity>
         <TouchableOpacity>
