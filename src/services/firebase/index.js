@@ -4,6 +4,8 @@ import database from '@react-native-firebase/database';
 export const login = (email, pass) =>
   auth().signInWithEmailAndPassword(email, pass);
 
+export const logout = () => auth().signOut();
+
 export const register = (email, pass) =>
   auth().createUserWithEmailAndPassword(email, pass);
 
