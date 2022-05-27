@@ -6,7 +6,7 @@ import {LogoSplash} from '../../assets';
 import {COLORS, FONTS, SIZES} from '../../themes';
 
 export default function Splash({navigation}) {
-  const userProfile = useSelector(state => state.UserReducer.userData);
+  const {isLogin} = useSelector(state => state.UserReducer);
   return (
     <View style={styles.container}>
       <LottieView
@@ -15,7 +15,7 @@ export default function Splash({navigation}) {
         autoPlay
         loop={false}
         onAnimationFinish={() => {
-          userProfile
+          isLogin
             ? navigation.replace('DashboardUserScreen')
             : navigation.replace('LoginScreen');
         }}
