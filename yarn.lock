@@ -837,6 +837,11 @@
   resolved "https://registry.npmjs.org/@expo/sdk-runtime-versions/-/sdk-runtime-versions-1.0.0.tgz"
   integrity sha512-Doz2bfiPndXYFPMRwPyGa1k5QaKDVpY806UJj570epIiMzWaYyCtobasyfC++qfIXVb5Ocy7r3tP9d62hAQ7IQ==
 
+"@freakycoder/react-native-bounceable@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@freakycoder/react-native-bounceable/-/react-native-bounceable-0.2.5.tgz#ad61bdafbf68465e9c2145e99c09b500ae091f0e"
+  integrity sha512-J8WBOYxbm/um7SqXYneduZ08T5Kin9z+ixsS3wOLtpeNvKscuqmDEgsgefTYydeSIoI5dOfWmklnRRgu5i/8nA==
+
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
   resolved "https://registry.npmjs.org/@hapi/hoek/-/hoek-9.3.0.tgz"
@@ -1327,6 +1332,11 @@
   resolved "https://registry.npmjs.org/@react-native-firebase/database/-/database-14.9.3.tgz"
   integrity sha512-n2y6084Kd8gpbWInOh5riGNTxdzhO9P18u+MsCu1Jj+Uclga6R1aaOFdZExu23oHGFcoWK8BXN47hbjIBsJVUQ==
 
+"@react-native-firebase/storage@^14.10.1":
+  version "14.10.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-14.10.1.tgz#2313b7f061bb2ce6e300f892107d9b830947d7b7"
+  integrity sha512-mgma2htePwpOxj7YUlVI24kHBdHHt4XMNTUW8dfQ52atIqe67DhCbkTSbs4TpW0PftZ/wyjtgwBLraxeic7IqQ==
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
@@ -1394,11 +1404,6 @@
     hoist-non-react-statics "^3.3.2"
     react-native-ratings "^8.1.0"
     react-native-size-matters "^0.4.0"
-
-"@rneui/themed@^4.0.0-rc.4":
-  version "4.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@rneui/themed/-/themed-4.0.0-rc.4.tgz#8997297036658a5c752e255355d42564bf16c6e9"
-  integrity sha512-1td9Fu3lyOYueowQxnnO/8WCX9eLU3jjIiLsNNVAdI6kDyMpGegP/2h2hj8y3tjdTgKrAiL46m8iEhJFncA9AA==
 
 "@sideway/address@^4.1.3":
   version "4.1.4"
@@ -2620,6 +2625,11 @@ dedent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.npmjs.org/dedent/-/dedent-0.6.0.tgz"
   integrity sha1-Dm2o8M5Sg471zsXI+TlrDBtko8s=
+
+deep-diff@^0.3.5:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
+  integrity sha1-wB3mPvsO7JeYgB1Ax+Da4ltYLIQ=
 
 deep-is@^0.1.3, deep-is@~0.1.3:
   version "0.1.4"
@@ -5226,7 +5236,7 @@ mkdirp@^0.5.1:
 
 moment@^2.29.3:
   version "2.29.3"
-  resolved "https://registry.npmjs.org/moment/-/moment-2.29.3.tgz"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
   integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
 
 ms@2.0.0:
@@ -5798,7 +5808,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@*, prop-types@^15.5.8, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5883,9 +5893,14 @@ react-native-codegen@^0.0.17:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-dynamic-search-bar@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-dynamic-search-bar/-/react-native-dynamic-search-bar-2.0.2.tgz#946326df34c853da1655aec7bdaacaa04b01e39c"
+  integrity sha512-VOJf43hwfA5TRmYPTmPd5+unosruKXxVL41vP/AaofMrYM90hen0LOgGxUkZquqjg/nQidv/PsQhzOx02orE7w==
+
 react-native-flash-message@^0.2.1:
   version "0.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-flash-message/-/react-native-flash-message-0.2.1.tgz#2c956000d60569984b82bff1b6b7b3bff31b4eb6"
+  resolved "https://registry.npmjs.org/react-native-flash-message/-/react-native-flash-message-0.2.1.tgz"
   integrity sha512-jVLIygLSBEl+GZur6wyxLtla/v8dUAy1dPVwDpjAiGg9D4D5gvkdE7ZGJ9hY9svVriF464mgNi3qXQ9AP/+pNg==
   dependencies:
     prop-types "^15.8.1"
@@ -5896,9 +5911,19 @@ react-native-gradle-plugin@^0.0.6:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
+react-native-image-crop-picker@^0.37.3:
+  version "0.37.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.37.3.tgz#f260e40b6a6ba8e98f4db3dde25a8f09e0936385"
+  integrity sha512-ih+0pWWRUNEFQyaHwGbH9rqJNOb7EBYMwKJhTY0VmsKIA9E+usfwMmQXAFIfOnee7fTn0A2vOXkBCPQZwyvnQw==
+
+react-native-ionicons@4.x:
+  version "4.6.5"
+  resolved "https://registry.yarnpkg.com/react-native-ionicons/-/react-native-ionicons-4.6.5.tgz#b792ec8896381e67ff237eba955e38afe7ceb7a4"
+  integrity sha512-s2Ia7M5t609LE9LWygMj3ALVPUlKhK7R9XcMb67fP4EYJv0oLcwg5pc+8ftv9XXaUuTW/WgL3zJlBYxAvtvMJg==
+
 react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
+  resolved "https://registry.npmjs.org/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
 react-native-ratings@^8.1.0:
@@ -5932,6 +5957,13 @@ react-native-size-matters@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.4.0.tgz#01bfd0d59454318f4e0b13fe9c1eb0523d70f2e0"
   integrity sha512-8/C0htHrFWeUm9N8JegmadovUfgTWkGBkDPZ1N3YkXtDWb+98Ya2gThiKcu445r8c7YhcrBfnHz/mYsXIusaOQ==
+
+react-native-spinkit@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-spinkit/-/react-native-spinkit-1.5.1.tgz#5b770ce93e1f892b3d1983fd3ce2d7375335eb6b"
+  integrity sha512-XkTgP4e+/MZpbI1GdZTIEQ+6WeMWQT4duWnSiXaaVW7py0rtaBLswtAEA6uXQGUhnxMnPWZhbLz7QponpH3ciQ==
+  dependencies:
+    prop-types "^15.5.8"
 
 react-native-uuid@^2.0.1:
   version "2.0.1"
@@ -6090,6 +6122,23 @@ recast@^0.20.4:
     esprima "~4.0.0"
     source-map "~0.6.1"
     tslib "^2.0.1"
+
+redux-logger@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
+  integrity sha1-91VZZvMJjzyIYExEnPC69XeCdL8=
+  dependencies:
+    deep-diff "^0.3.5"
+
+redux-persist@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
+  integrity sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==
+
+redux-thunk@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.4.1.tgz#0dd8042cf47868f4b29699941de03c9301a75714"
+  integrity sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==
 
 redux@^4.2.0:
   version "4.2.0"

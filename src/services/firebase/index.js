@@ -4,6 +4,8 @@ import database from '@react-native-firebase/database';
 export const login = (email, pass) =>
   auth().signInWithEmailAndPassword(email, pass);
 
+export const logout = () => auth().signOut();
+
 export const register = (email, pass) =>
   auth().createUserWithEmailAndPassword(email, pass);
 
@@ -17,8 +19,11 @@ export const addUser = (email, name, uid, bio) =>
       email: email,
       name: name,
       bio: bio || 'my bio',
-      avatar: `https://ui-avatars.com/api/?background=random&name=${name}`,
+      avatar: 'https://i.pravatar.cc/300',
     });
+
+export const getProfile = email =>
+  database().ref('users/').orderByChild('email').equalTo(email).once('value');
 
 export const onRegisterWithRDB = async data =>
   database()
@@ -28,3 +33,6 @@ export const onRegisterWithRDB = async data =>
       email: data.email,
       name: data.name,
     });
+
+export const loginWithRDB = email =>
+  database().ref('users/').orderByChild('emailId').equalTo(email).once('value');

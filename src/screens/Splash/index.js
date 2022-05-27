@@ -1,10 +1,12 @@
 import LottieView from 'lottie-react-native';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
 import {LogoSplash} from '../../assets';
 import {COLORS, FONTS, SIZES} from '../../themes';
 
 export default function Splash({navigation}) {
+  const {isLogin} = useSelector(state => state.UserReducer);
   return (
     <View style={styles.container}>
       <LottieView
@@ -13,10 +15,12 @@ export default function Splash({navigation}) {
         autoPlay
         loop={false}
         onAnimationFinish={() => {
-          navigation.replace('LoginScreen');
+          isLogin
+            ? navigation.replace('DashboardUserScreen')
+            : navigation.replace('LoginScreen');
         }}
       />
-      <Text style={styles.copyright}>Dzun Nurroin</Text>
+      <Text style={styles.copyright}>Made by ❤️</Text>
     </View>
   );
 }

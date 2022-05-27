@@ -7,13 +7,21 @@ import {
   CrudScreen,
   DashboardUser,
   Chat,
+  ProfileScreen,
+  SearchUser,
 } from '../screens';
+import {COLORS} from '../themes';
 
 const Stack = createNativeStackNavigator();
 
 function Router() {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator
+      initialRouteName="SplashScreen"
+      screenOptions={{
+        gestureEnabled: true,
+        gestureDirection: 'horizontal-inverted',
+      }}>
       <Stack.Screen
         name="SplashScreen"
         component={Splash}
@@ -43,6 +51,24 @@ function Router() {
         name="ChatScreen"
         component={Chat}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="SearchUser"
+        component={SearchUser}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: COLORS.primary,
+          },
+          headerTintColor: COLORS.white,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
       />
     </Stack.Navigator>
   );
