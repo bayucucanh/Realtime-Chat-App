@@ -1,4 +1,4 @@
-import {SET_USER} from '../types';
+import {LOGUT_USER, SET_USER} from '../types';
 
 const initialState = {
   userData: {},
@@ -12,6 +12,12 @@ export const UserReducer = (state = initialState, action) => {
         ...state,
         userData: action.payload,
         isLogin: true,
+      };
+    case LOGUT_USER:
+      return {
+        ...state,
+        userData: {},
+        isLogin: false,
       };
 
     default:
