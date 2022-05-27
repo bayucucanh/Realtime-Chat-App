@@ -9,6 +9,30 @@ export default function index() {
         <Skeleton circle width={40} height={40} />
         <Skeleton variant="circular" width={300} height={40} />
       </ListItem>
+      <ListItem containerStyle={styles.container}>
+        <Skeleton circle width={40} height={40} />
+        <Skeleton variant="circular" width={300} height={40} />
+      </ListItem>
+      <ListItem containerStyle={styles.container}>
+        <Skeleton circle width={40} height={40} />
+        <Skeleton variant="circular" width={300} height={40} />
+      </ListItem>
+      <ListItem containerStyle={styles.container}>
+        <Skeleton circle width={40} height={40} />
+        <Skeleton variant="circular" width={300} height={40} />
+      </ListItem>
+      <ListItem containerStyle={styles.container}>
+        <Skeleton circle width={40} height={40} />
+        <Skeleton variant="circular" width={300} height={40} />
+      </ListItem>
+      <ListItem containerStyle={styles.container}>
+        <Skeleton circle width={40} height={40} />
+        <Skeleton variant="circular" width={300} height={40} />
+      </ListItem>
+      <ListItem containerStyle={styles.container}>
+        <Skeleton circle width={40} height={40} />
+        <Skeleton variant="circular" width={300} height={40} />
+      </ListItem>
     </>
   );
 }
