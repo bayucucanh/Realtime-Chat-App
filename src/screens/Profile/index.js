@@ -1,22 +1,29 @@
-import {Avatar, ListItem, BottomSheet} from '@rneui/base';
+import database from '@react-native-firebase/database';
+import storage from '@react-native-firebase/storage';
+import {Avatar, BottomSheet} from '@rneui/base';
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {StyleSheet, TouchableOpacity, View, Platform} from 'react-native';
+import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
-import {CustomButton, CustomInput} from '../../components';
-import {COLORS, FONTS} from '../../themes';
-import {showError, showSuccess} from '../../utils';
-import database from '@react-native-firebase/database';
-import {setUser} from '../../store/actions';
+import {
+  CardInfo,
+  CustomButton,
+  CustomInput,
+  OverlayLoading,
+} from '../../components';
 import {getProfile} from '../../services';
-import ImagePicker from 'react-native-image-crop-picker';
+import {setUser} from '../../store/actions';
+import {COLORS} from '../../themes';
+import {showError, showSuccess, withCamera, withGallery} from '../../utils';
 
 export default function ProfileScreen() {
   const userProfile = useSelector(state => state.UserReducer.userData);
   const [isVisible, setIsVisible] = useState(false);
   const [modalAvatar, setModalAvatar] = useState(false);
-  const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+
   const {control, handleSubmit, reset} = useForm({
     defaultValues: {
       name: userProfile.name,
@@ -26,7 +33,7 @@ export default function ProfileScreen() {
 
   const dispatch = useDispatch();
 
-  const resetModal = () => {
+  const resetModalProfile = () => {
     setIsVisible(false);
     reset();
   };
@@ -53,145 +60,191 @@ export default function ProfileScreen() {
     }
   };
 
+  const updateAvatar = async data => {
+    try {
+      await database()
+        .ref(`/users/${userProfile.id_user}`)
+        .update({avatar: data})
+        .then(ress => {
+          getProfile(userProfile.email).then(async snapshot => {
+            let userData = Object.values(snapshot.val())[0];
+            dispatch(setUser(userData));
+          });
+          setUploading(false);
+          showSuccess('Avatar updated');
+        });
+    } catch (error) {
+      setUploading(false);
+      showError(error);
+    }
+  };
+
   const takePhotoFromCamera = () => {
     setModalAvatar(false);
-    ImagePicker.openCamera({
-      width: 1200,
-      height: 780,
-      cropping: true,
-    }).then(val => {
-      console.log(val);
-      const imageUri = Platform.OS === 'ios' ? val.sourceURL : val.path;
-      setImage(imageUri);
-    });
+    withCamera()
+      .then(val => {
+        console.log(val);
+        const imageUri = Platform.OS === 'ios' ? val.sourceURL : val.path;
+        uploadImage(imageUri);
+      })
+      .catch(() => {});
   };
 
   const choosePhotoFromLibrary = () => {
     setModalAvatar(false);
-    ImagePicker.openPicker({
-      width: 1200,
-      height: 780,
-      cropping: true,
-    }).then(val => {
-      console.log(val);
-      const imageUri = Platform.OS === 'ios' ? val.sourceURL : val.path;
-      setImage(imageUri);
-    });
+    withGallery()
+      .then(val => {
+        console.log(val);
+        const imageUri = Platform.OS === 'ios' ? val.sourceURL : val.path;
+        uploadImage(imageUri);
+      })
+      .catch(() => {});
   };
 
-  const CardInfo = ({icon, topDivider, label, content, edit, onPress}) => {
-    return (
-      <ListItem topDivider={topDivider}>
-        <Icon name={icon} size={20} color={COLORS.lightGray4} />
-        <ListItem.Content>
-          <ListItem.Subtitle style={styles.label} numberOfLines={1}>
-            {label}
-          </ListItem.Subtitle>
-          <ListItem.Title style={styles.labelTitle}>{content}</ListItem.Title>
-        </ListItem.Content>
-        {edit && (
-          <TouchableOpacity onPress={onPress}>
-            <Icon name="create" size={20} color={COLORS.primary} />
-          </TouchableOpacity>
-        )}
-      </ListItem>
-    );
+  const uploadImage = async imageUri => {
+    if (imageUri == null) {
+      return null;
+    }
+    const uploadUri = imageUri;
+    let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+
+    // Add timestamp to File Name
+    const extension = filename.split('.').pop();
+    // const name = filename.split('.').slice(0, -1).join('.');
+    filename = userProfile.id_user + '.' + extension;
+
+    setUploading(true);
+    setTransferred(0);
+
+    const storageRef = storage().ref(`photos/${filename}`);
+    const task = storageRef.putFile(uploadUri);
+
+    // Set transferred state
+    task.on('state_changed', taskSnapshot => {
+      console.log(
+        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
+      );
+
+      setTransferred(
+        Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
+          100,
+      );
+    });
+
+    try {
+      await task;
+
+      const url = await storageRef.getDownloadURL();
+      await updateAvatar(url);
+    } catch (e) {
+      console.log(e);
+      setUploading(false);
+      return null;
+    }
   };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.fotoProfile}>
-        <Avatar
-          size={160}
-          rounded
-          source={{
-            uri: userProfile.avatar,
-          }}
-        />
-        <TouchableOpacity
-          style={styles.editAvatar}
-          onPress={() => setModalAvatar(true)}>
-          <View style={styles.camera}>
-            <Icon name="camera" size={20} color={COLORS.white} />
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.infoUser}>
-        <CardInfo
-          icon="person"
-          label="Nama"
-          content={userProfile.name}
-          edit
-          onPress={() => setIsVisible(true)}
-        />
-        <CardInfo
-          icon="information-circle"
-          label="Bio"
-          content={userProfile.bio}
-        />
-        <CardInfo
-          topDivider
-          icon="mail"
-          label="Email"
-          content={userProfile.email}
-        />
-      </View>
-      <BottomSheet isVisible={isVisible} onBackdropPress={resetModal}>
-        <View style={styles.form}>
-          <CustomInput
-            testID="input-name"
+    <>
+      <View style={styles.container}>
+        {/* Avatar User */}
+        <View style={styles.fotoProfile}>
+          <Avatar
+            size={160}
+            rounded
+            source={{
+              uri: userProfile.avatar,
+            }}
+          />
+          <TouchableOpacity
+            style={styles.editAvatar}
+            onPress={() => setModalAvatar(true)}>
+            <View style={styles.camera}>
+              <Icon name="camera" size={20} color={COLORS.white} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        {/* Info user */}
+        <View style={styles.infoUser}>
+          <CardInfo
+            icon="person"
             label="Nama"
-            name="name"
-            iconPosition="right"
-            placeholder="Enter Name"
-            control={control}
-            rules={{
-              required: 'Name is required',
-            }}
+            content={userProfile.name}
+            edit
+            onPress={() => setIsVisible(true)}
           />
-          <CustomInput
-            testID="input-bio"
+          <CardInfo
+            icon="information-circle"
             label="Bio"
-            name="bio"
-            iconPosition="right"
-            placeholder="Enter Bio"
-            control={control}
-            rules={{
-              required: 'Bio is required',
-            }}
+            content={userProfile.bio}
           />
-          <View style={styles.buttonAction}>
+          <CardInfo
+            topDivider
+            icon="mail"
+            label="Email"
+            content={userProfile.email}
+          />
+        </View>
+        {/* Modal Update Info User */}
+        <BottomSheet isVisible={isVisible} onBackdropPress={resetModalProfile}>
+          <View style={styles.form}>
+            <CustomInput
+              testID="input-name"
+              label="Nama"
+              name="name"
+              iconPosition="right"
+              placeholder="Enter Name"
+              control={control}
+              rules={{
+                required: 'Name is required',
+              }}
+            />
+            <CustomInput
+              testID="input-bio"
+              label="Bio"
+              name="bio"
+              iconPosition="right"
+              placeholder="Enter Bio"
+              control={control}
+              rules={{
+                required: 'Bio is required',
+              }}
+            />
+            <View style={styles.buttonAction}>
+              <CustomButton
+                style={styles.btnStyle}
+                secondary
+                onPress={resetModalProfile}
+                title="Cancel"
+              />
+              <CustomButton
+                style={styles.btnStyle}
+                primary
+                title="Save"
+                onPress={handleSubmit(updateProfile)}
+              />
+            </View>
+          </View>
+        </BottomSheet>
+        {/* Modal Upload Avatars */}
+        <BottomSheet isVisible={modalAvatar} onBackdropPress={resetModalImage}>
+          <View style={styles.form}>
             <CustomButton
-              style={styles.btnStyle}
-              secondary
-              onPress={resetModal}
-              title="Cancel"
+              primary
+              icon={<Icon name="camera" size={20} color={COLORS.white} />}
+              title="Take Photo"
+              onPress={takePhotoFromCamera}
             />
             <CustomButton
-              style={styles.btnStyle}
-              primary
-              title="Save"
-              onPress={handleSubmit(updateProfile)}
+              secondary
+              icon={<Icon name="image" size={20} color={COLORS.white} />}
+              title="Choose Photo"
+              onPress={choosePhotoFromLibrary}
             />
           </View>
-        </View>
-      </BottomSheet>
-      <BottomSheet isVisible={modalAvatar} onBackdropPress={resetModalImage}>
-        <View style={styles.form}>
-          <CustomButton
-            primary
-            icon={<Icon name="camera" size={20} color={COLORS.white} />}
-            title="Take Photo"
-            onPress={takePhotoFromCamera}
-          />
-          <CustomButton
-            secondary
-            icon={<Icon name="image" size={20} color={COLORS.white} />}
-            title="Choose Photo"
-            onPress={choosePhotoFromLibrary}
-          />
-        </View>
-      </BottomSheet>
-    </View>
+        </BottomSheet>
+      </View>
+      {uploading && <OverlayLoading title={transferred + '% Completed!'} />}
+    </>
   );
 }
 
@@ -228,16 +281,6 @@ const styles = StyleSheet.create({
   infoUser: {
     marginTop: 20,
     marginHorizontal: 10,
-  },
-  label: {
-    ...FONTS.body4,
-    color: COLORS.lightGray,
-  },
-  labelTitle: {
-    ...FONTS.h3,
-  },
-  labelBio: {
-    ...FONTS.h3,
   },
   buttonAction: {
     flex: 1,
