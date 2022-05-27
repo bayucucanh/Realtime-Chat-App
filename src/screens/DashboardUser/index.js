@@ -13,7 +13,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
-import {SkeletonList} from '../../components';
+import {EmptyChat} from '../../assets';
+import {EmptyState, SkeletonList} from '../../components';
 import {COLORS, FONTS} from '../../themes';
 
 export default function DashboardUser({navigation}) {
@@ -23,19 +24,32 @@ export default function DashboardUser({navigation}) {
   const userProfile = useSelector(state => state.UserReducer.userData);
 
   useEffect(() => {
-    getChatlist();
+    renderData();
   }, []);
 
-  const getChatlist = async () => {
+  const getChatlist = id_user => {
     setloading(true);
     database()
-      .ref('/chatlist/' + userProfile.id_user)
+      .ref('/chatlist/' + id_user)
       .on('value', snapshot => {
-        if (snapshot.val() != null) {
-          setchatList(Object.values(snapshot.val()));
+        if (snapshot.val()) {
+          const array = Object.values(snapshot.val());
+          const sortedArray = array.sort(
+            (a, b) =>
+              new Date(b.sendTime).getTime() - new Date(a.sendTime).getTime(),
+          );
+          const dataMsgNotNull = sortedArray.filter(it => it.lastMsg !== '');
+          setchatList(dataMsgNotNull);
+          setloading(false);
         }
         setloading(false);
       });
+  };
+
+  const renderData = () => {
+    if (userProfile) {
+      getChatlist(userProfile?.id_user);
+    }
   };
 
   const Header = () => {
@@ -89,6 +103,13 @@ export default function DashboardUser({navigation}) {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item, index) => index.toString()}
           data={chatList}
+          ListEmptyComponent={() => (
+            <EmptyState
+              source={EmptyChat}
+              title="No Conversation"
+              message="You didn't made any conversation yet."
+            />
+          )}
           renderItem={renderItem}
         />
       )}
